@@ -1,0 +1,35 @@
+---
+alwaysApply: true
+description: Database rules for Prisma and Supabase
+globs: **/*.ts, prisma/**
+---
+
+# Database Rules
+
+## Prisma
+- Use the singleton Prisma client from /lib/prisma.ts
+- Never instantiate PrismaClient directly in components
+- Always use Prisma transactions for multi-step DB operations
+- Use select to only fetch fields you need
+- All IDs are UUIDs (@default(uuid()))
+- All timestamps use DateTime (@default(now()))
+
+## Prisma Singleton Pattern
+import { PrismaClient } from '@prisma/client'
+
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
+
+export const prisma = globalForPrisma.prisma || new PrismaClient()
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+
+## Supabase
+- Use server client for server actions and API routes
+- Use browser client for client components only
+- Never expose the service role key to the client
+- Always destructure { data, error } from Supabase calls
+
+## Error Handling
+- Always check for errors after every DB call
+- Return { error: 'User-friendly message' } from server actions
+- Log technical errors server-side, return clean messages to client

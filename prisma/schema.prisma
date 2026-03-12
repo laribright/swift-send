@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                String      @id @default(uuid())
+  email             String      @unique
+  firstName         String
+  lastName          String
+  avatarUrl         String?
+  createdAt         DateTime    @default(now())
+  accounts          Account[]
+  sentTransfers     Transfer[]  @relation("SentTransfers")
+  receivedTransfers Transfer[]  @relation("ReceivedTransfers")
+  plaidItems        PlaidItem[]
+}
+
+model Account {
+  id           String        @id @default(uuid())
+  userId       String
+  user         User          @relation(fields: [userId], references: [id])
+  name         String
+  type         AccountType   @default(CHECKING)
+  balance      Decimal       @default(0)
+  currency     String        @default("USD") // Maybe change to currency enum
+  mask         String?
+  createdAt    DateTime      @default(now())
+  transactions Transaction[]
+}
+
+model Transaction {
+  id          String          @id @default(uuid())
+  accountId   String
+  account     Account         @relation(fields: [accountId], references: [id])
+  amount      Decimal
+  type        TransactionType
+  status      TxStatus        @default(PENDING)
+  description String?
+  category    String?
+  date        DateTime        @default(now())
+  transferId  String?
+  transfer    Transfer?       @relation(fields: [transferId], references: [id])
+}
+
+model Transfer {
+  id              String         @id @default(uuid())
+  senderId        String
+  sender          User           @relation("SentTransfers", fields: [senderId], references: [id])
+  receiverId      String
+  receiver        User           @relation("ReceivedTransfers", fields: [receiverId], references: [id])
+  amount          Decimal
+  currency        String         @default("USD") // Maybe change to currency enum
+  note            String?
+  status          TransferStatus @default(PENDING)
+  stripePaymentId String?
+  createdAt       DateTime       @default(now())
+  transactions    Transaction[]
+}
+
+model PlaidItem {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  accessToken     String
+  itemId          String   @unique
+  institutionId   String?
+  institutionName String?
+  createdAt       DateTime @default(now())
+}
+
+enum AccountType {
+  CHECKING
+  SAVINGS
+}
+
+enum TransactionType {
+  DEBIT
+  CREDIT
+}
+
+enum TxStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum TransferStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}

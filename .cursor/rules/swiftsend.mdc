@@ -1,0 +1,56 @@
+---
+alwaysApply: true
+description: SwiftSend — main project rules
+globs: **/*.ts, **/*.tsx
+---
+
+# SwiftSend Project Rules
+
+## Project Overview
+SwiftSend is a full-stack Wise clone built with Next.js App Router.
+YouTube tutorial project for the Code with Lari channel.
+
+## Tech Stack
+- Framework:  Next.js (App Router, TypeScript)
+- Styling:    Tailwind CSS + shadcn/ui
+- Auth:       Supabase Auth
+- Database:   Supabase (PostgreSQL)
+- ORM:        Prisma
+- Payments:   Stripe
+- Bank Link:  Plaid (sandbox mode)
+- Validation: Zod
+- Deployment: Vercel
+
+## File Naming
+- All files:       kebab-case (e.g. transaction-card.tsx, auth-form.tsx)
+- Server actions:  kebab-case.actions.ts (e.g. transfer.actions.ts)
+- Validations:     kebab-case.ts (e.g. transfer.ts)
+- Pages:           page.tsx (Next.js convention)
+
+## Folder Structure
+- /app                  → Next.js pages and layouts
+- /components/ui        → shadcn/ui components (do not edit)
+- /components/shared    → custom reusable components
+- /actions              → all server actions
+- /lib                  → utilities, validations, clients
+- /prisma               → schema and migrations
+
+## Server Actions
+- ALL mutations use Next.js Server Actions
+- ALL server actions use the useServerAction hook pattern
+- ALL server actions validate inputs with Zod before processing
+- Server actions live in /actions/*.actions.ts
+- Naming: verbNounAction (e.g. createTransferAction)
+- Always return { success, data } or { error } — never throw
+
+## Validation
+- ALL forms use Zod schemas
+- Schemas live in /lib/validations/*.ts
+- Always validate server-side, never trust client data
+
+## Code Style
+- Always use TypeScript — no 'any' types
+- Prefer async/await over .then()
+- Use optional chaining (?.) and nullish coalescing (??)
+- Keep components small and focused (< 150 lines)
+- Always handle loading, empty, and error states

@@ -1,0 +1,34 @@
+---
+alwaysApply: true
+description: Frontend and UI component rules
+globs: **/*.tsx, **/*.css
+---
+
+# Frontend Rules
+
+## Components
+- Use shadcn/ui as the base component library
+- Custom components go in /components/shared/
+- Always add skeleton loading states for async data
+- Always add empty states when lists can be empty
+- Always add error states for failed fetches
+
+## Styling
+- Tailwind CSS utility classes only
+- No custom CSS unless absolutely necessary
+- Use cn() from /lib/utils for conditional class merging
+- Mobile-first responsive design (sm: md: lg: breakpoints)
+
+## Forms
+- Use react-hook-form for all forms
+- Connect Zod schema with zodResolver
+- Use useServerAction hook to call server actions
+- Show inline field errors below each input
+- Disable submit button while action is pending
+- Show toast on success or error
+
+## Data Fetching
+- Fetch data in Server Components where possible
+- Use Suspense boundaries with skeleton fallbacks
+- Pass data down as props to Client Components
+- Use URL searchParams for filter and pagination state
