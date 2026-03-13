@@ -1,8 +1,8 @@
 import {
   getDashboardStats,
-  getAccountsWithBalance,
   getRecentTransactions,
 } from "@/actions/account.actions";
+import { getLinkedAccounts } from "@/actions/plaid.actions";
 import { getCurrentUser } from "@/actions/user.actions";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
@@ -30,12 +30,14 @@ export default async function DashboardPage() {
     redirect("/sign-in");
   }
 
-  const [stats, accounts, transactions, currentUser] = await Promise.all([
+  const [stats, transactions, currentUser, linkedResult] = await Promise.all([
     getDashboardStats(user.id),
-    getAccountsWithBalance(user.id),
     getRecentTransactions(user.id),
     getCurrentUser(user.id),
+    getLinkedAccounts(user.id),
   ]);
+
+  const linkedAccounts = linkedResult.data ?? [];
 
   const firstName = currentUser?.firstName ?? "there";
 
@@ -72,7 +74,7 @@ export default async function DashboardPage() {
 
       <RecentTransactions transactions={transactions} />
 
-      <LinkedAccountStrip accounts={accounts} />
+      <LinkedAccountStrip linkedAccounts={linkedAccounts} userId={user.id} />
     </div>
   );
 }
