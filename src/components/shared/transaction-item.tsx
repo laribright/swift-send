@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { RecentTransaction } from "@/actions/account.actions";
+import type { PaginatedTransaction } from "@/actions/transaction.actions";
 
 function CategoryIcon({
   category,
@@ -50,7 +51,7 @@ const statusVariant = {
 };
 
 interface TransactionItemProps {
-  transaction: RecentTransaction;
+  transaction: RecentTransaction | PaginatedTransaction;
 }
 
 export function TransactionItem({ transaction }: TransactionItemProps) {
