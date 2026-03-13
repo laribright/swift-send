@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { createZodResolver } from "@/lib/form-resolver";
 import { signUpSchema, type SignUpInput } from "@/lib/validations/auth";
 import { signUpAction } from "@/actions/auth.actions";
 import { useServerAction } from "@/hooks/use-server-action";
@@ -24,8 +24,7 @@ export default function SignUpPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<SignUpInput>({
-    // @ts-expect-error -- zod@4.3.x branded-version mismatch with @hookform/resolvers@5.2.x (runtime is correct)
-    resolver: zodResolver(signUpSchema),
+    resolver: createZodResolver(signUpSchema),
   });
 
   const { execute, isLoading } = useServerAction(signUpAction);
