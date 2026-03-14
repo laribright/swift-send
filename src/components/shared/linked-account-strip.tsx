@@ -26,11 +26,11 @@ export function LinkedAccountStrip({
   return (
     <div className="space-y-3">
       <h2 className="text-lg font-semibold">Linked Accounts</h2>
-      <div className="flex gap-3 overflow-x-auto pb-2">
+      <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
         {linkedAccounts.map((account) => (
           <div
             key={account.id}
-            className="min-w-[220px] shrink-0 rounded-lg border bg-card p-4"
+            className="min-w-[180px] sm:min-w-[220px] shrink-0 rounded-lg border bg-card p-4"
           >
             <p className="truncate text-xs font-medium uppercase text-muted-foreground">
               {account.institutionName ?? "Bank"}
@@ -47,7 +47,7 @@ export function LinkedAccountStrip({
             </Badge>
           </div>
         ))}
-        <div className="flex min-w-[220px] shrink-0 items-center justify-center rounded-lg border border-dashed">
+        <div className="flex min-w-[180px] sm:min-w-[220px] shrink-0 items-center justify-center rounded-lg border border-dashed">
           <PlaidLinkButton userId={userId} variant="ghost" size="sm">
             Add another
           </PlaidLinkButton>

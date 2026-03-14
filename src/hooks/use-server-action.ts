@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { toast } from "sonner";
 
 interface UseServerActionOptions {
@@ -34,7 +35,10 @@ export function useServerAction<TInput, TOutput = void>(
         }
 
         return result.data;
-      } catch {
+      } catch (err) {
+        if (isRedirectError(err)) {
+          throw err;
+        }
         toast.error("Something went wrong");
       } finally {
         setIsLoading(false);
